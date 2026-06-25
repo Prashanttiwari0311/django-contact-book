@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Book</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+    href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins',sans-serif;
+        }
+
+        body{
+            background:#f4f7fc;
+            min-height:100vh;
+            padding:30px;
+        }
+
+        .container{
+            max-width:1200px;
+            margin:auto;
+        }
+
+        .header{
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            color:white;
+            padding:25px;
+            border-radius:15px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            flex-wrap:wrap;
+            margin-bottom:25px;
+        }
+
+        .header h1{
+            font-size:32px;
+        }
+
+        .add-btn{
+            text-decoration:none;
+            background:white;
+            color:#764ba2;
+            padding:12px 20px;
+            border-radius:10px;
+            font-weight:600;
+            transition:.3s;
+        }
+
+        .add-btn:hover{
+            transform:translateY(-3px);
+        }
+
+        .search-box{
+            background:white;
+            padding:20px;
+            border-radius:15px;
+            margin-bottom:20px;
+            box-shadow:0 5px 15px rgba(0,0,0,.08);
+        }
+
+        .search-box form{
+            display:flex;
+            gap:15px;
+        }
+
+        .search-box input{
+            flex:1;
+            padding:12px;
+            border:1px solid #ddd;
+            border-radius:10px;
+            outline:none;
+        }
+
+        .search-box button{
+            padding:12px 20px;
+            border:none;
+            background:#667eea;
+            color:white;
+            border-radius:10px;
+            cursor:pointer;
+        }
+
+        .table-container{
+            background:white;
+            border-radius:15px;
+            overflow:hidden;
+            box-shadow:0 5px 15px rgba(0,0,0,.08);
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th{
+            background:#667eea;
+            color:white;
+            padding:15px;
+            text-align:left;
+        }
+
+        td{
+            padding:15px;
+            border-bottom:1px solid #eee;
+        }
+
+        tr:hover{
+            background:#f9fafc;
+        }
+
+        .edit-btn,
+        .delete-btn{
+            text-decoration:none;
+            padding:8px 14px;
+            border-radius:8px;
+            color:white;
+            font-size:14px;
+            margin-right:5px;
+        }
+
+        .edit-btn{
+            background:#10b981;
+        }
+
+        .delete-btn{
+            background:#ef4444;
+        }
+
+        .pagination{
+            display:flex;
+            justify-content:center;
+            margin-top:25px;
+            gap:10px;
+        }
+
+        .pagination a{
+            text-decoration:none;
+            padding:10px 15px;
+            background:white;
+            border-radius:8px;
+            box-shadow:0 2px 8px rgba(0,0,0,.1);
+            color:#333;
+        }
+
+        .active{
+            background:#667eea !important;
+            color:white !important;
+        }
+
+        .empty{
+            text-align:center;
+            padding:40px;
+            color:#888;
+        }
+
+        .dataTables_wrapper{
+            padding:20px;
+        }
+
+        .dataTables_filter{
+            margin-bottom:15px;
+        }
+
+        .dataTables_filter input{
+            border:1px solid #ddd !important;
+            border-radius:8px !important;
+            padding:8px !important;
+        }
+
+        .dataTables_length select{
+            border:1px solid #ddd !important;
+            border-radius:8px !important;
+            padding:5px !important;
+        }
+
+        .dataTables_info{
+            margin-top:15px;
+        }
+
+        .dataTables_paginate{
+            margin-top:15px !important;
+        }
+
+        @media(max-width:768px){
+
+            .header{
+                flex-direction:column;
+                gap:15px;
+                text-align:center;
+            }
+
+            table{
+                display:block;
+                overflow-x:auto;
+            }
+
+            .search-box form{
+                flex-direction:column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1>📒 Contact Book</h1>
+        <a href="{% url 'add_contact' %}" class="add-btn">
+            + Add Contact
+        </a>
+    </div>
+
+    <div class="table-container">
+
+    {% if contacts %}
+
+    <table id="contactTable" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for contact in contacts %}
+            <tr>
+                <td>{{ contact.name }}</td>
+                <td>{{ contact.phone }}</td>
+                <td>{{ contact.email }}</td>
+
+                <td>
+                    <a href="{% url 'edit_contact' contact.id %}"
+                       class="edit-btn">
+                        Edit
+                    </a>
+
+                    <a href="{% url 'delete_contact' contact.id %}"
+                       class="delete-btn"
+                       onclick="return confirm('Delete this contact?')">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+
+    {% else %}
+
+    <div class="empty">
+        <h3>No Contacts Found</h3>
+        <p>Add your first contact to get started.</p>
+    </div>
+
+    {% endif %}
+
+</div>
+
+</div>
+
+
+<script>
+$(document).ready(function () {
+
+    $('#contactTable').DataTable({
+        pageLength: 5,
+
+        lengthMenu: [
+            [5, 10, 25, 50, -1],
+            [5, 10, 25, 50, "All"]
+        ],
+
+        ordering: true,
+
+        language: {
+            search: "🔍 Search:",
+            lengthMenu: "Show _MENU_ contacts",
+            info: "Showing _START_ to _END_ of _TOTAL_ contacts",
+            paginate: {
+                previous: "← Previous",
+                next: "Next →"
+            }
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>

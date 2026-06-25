@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Contact</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins', sans-serif;
+        }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:linear-gradient(135deg,#667eea,#764ba2);
+            padding:20px;
+        }
+
+        .card{
+            width:100%;
+            max-width:500px;
+            background:white;
+            border-radius:20px;
+            padding:40px;
+            text-align:center;
+            box-shadow:0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .icon{
+            font-size:70px;
+            margin-bottom:20px;
+        }
+
+        h2{
+            color:#333;
+            margin-bottom:15px;
+        }
+
+        p{
+            color:#666;
+            margin-bottom:30px;
+            line-height:1.6;
+        }
+
+        .contact-name{
+            color:#ef4444;
+            font-weight:600;
+        }
+
+        .btn-group{
+            display:flex;
+            gap:15px;
+            justify-content:center;
+        }
+
+        .btn{
+            padding:12px 25px;
+            border:none;
+            border-radius:10px;
+            cursor:pointer;
+            font-size:15px;
+            font-weight:600;
+            text-decoration:none;
+            transition:0.3s;
+        }
+
+        .delete-btn{
+            background:#ef4444;
+            color:white;
+        }
+
+        .delete-btn:hover{
+            background:#dc2626;
+        }
+
+        .cancel-btn{
+            background:#e5e7eb;
+            color:#333;
+        }
+
+        .cancel-btn:hover{
+            background:#d1d5db;
+        }
+
+        @media(max-width:600px){
+            .btn-group{
+                flex-direction:column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+
+        <div class="icon">🗑️</div>
+
+        <h2>Delete Contact</h2>
+
+        <p>
+            Are you sure you want to delete
+            <span class="contact-name">{{ contact.name }}</span>?
+            <br>
+            This action cannot be undone.
+        </p>
+
+        <div class="btn-group">
+
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn delete-btn">
+                    Yes, Delete
+                </button>
+            </form>
+
+            <a href="{% url 'contact_list' %}" class="btn cancel-btn">
+                Cancel
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
